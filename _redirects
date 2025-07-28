@@ -1,0 +1,20 @@
+# SPA 라우팅 설정 (Single Page Application)
+/*    /index.html   200
+
+# www 서브도메인 리다이렉트
+https://www.wildpoint.netlify.app/*  https://wildpoint.netlify.app/:splat  301!
+
+# HTTP to HTTPS 리다이렉트
+http://wildpoint.netlify.app/*  https://wildpoint.netlify.app/:splat  301!
+http://www.wildpoint.netlify.app/*  https://wildpoint.netlify.app/:splat  301!
+
+# 404 페이지 리다이렉트
+/404  /index.html  404
+
+# API 경로 리다이렉트 (향후 사용 시)
+/api/*  /.netlify/functions/:splat  200
+
+# 레거시 경로 리다이렉트 (필요 시)
+/home  /  301
+/wiki  /  301
+/info  /  301 

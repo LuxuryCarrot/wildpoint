@@ -1,0 +1,46 @@
+{
+  "name": "wildpoint-server-wiki",
+  "version": "1.0.0",
+  "description": "Wild-Point Minecraft Server Wiki - 프리미엄 마인크래프트 서버 정보 사이트",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -s -l 3000",
+    "build": "echo 'Static site - no build required'",
+    "dev": "npx live-server --port=3000 --host=localhost",
+    "deploy": "echo 'Deploying to Netlify...'",
+    "lint": "echo 'Linting HTML and CSS...'",
+    "validate": "echo 'Validating HTML structure...'"
+  },
+  "keywords": [
+    "minecraft",
+    "server",
+    "wiki",
+    "wildpoint",
+    "gaming",
+    "korean"
+  ],
+  "author": "Wild-Point Server Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/wildpoint.git"
+  },
+  "homepage": "https://wildpoint.netlify.app",
+  "bugs": {
+    "url": "https://github.com/your-username/wildpoint/issues"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+} 

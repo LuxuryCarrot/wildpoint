@@ -1,0 +1,75 @@
+[build]
+  # 빌드 명령어 (정적 HTML이므로 별도 빌드 불필요)
+  command = "echo 'Build complete'"
+  
+  # 배포할 디렉토리
+  publish = "."
+  
+  # 함수 디렉토리 (사용 시)
+  functions = "netlify/functions"
+
+[build.environment]
+  # Node.js 버전 설정
+  NODE_VERSION = "18"
+
+# 리다이렉트 설정
+[[redirects]]
+  # SPA 라우팅을 위한 fallback (필요 시)
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"], Country = ["US"]}
+  force = false
+
+# 헤더 설정
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
+
+# 정적 파일 캐싱
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# 404 페이지 설정
+[[redirects]]
+  from = "/404"
+  to = "/404.html"
+  status = 404
+
+# www 서브도메인 리다이렉트 (필요 시)
+[[redirects]]
+  from = "https://www.wildpoint.netlify.app/*"
+  to = "https://wildpoint.netlify.app/:splat"
+  status = 301
+  force = true
+
+# 개발 환경 설정
+[context.deploy-preview]
+  command = "echo 'Preview build complete'"
+
+[context.branch-deploy]
+  command = "echo 'Branch build complete'"
+
+# 플러그인 설정 (필요 시)
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+  
+  [plugins.inputs]
+    buildDir = "." 
