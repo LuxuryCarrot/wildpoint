@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서버 명령어 - Wild-Point Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 상단 네비게이션 */
+        .top-nav {
+            background: rgba(52, 73, 94, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 0 2rem;
+        }
+
+        .nav-link {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        /* 메인 컨텐츠 */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #f39c12, #e67e22, #d35400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .content-card h2 {
+            color: #f39c12;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-card h3 {
+            color: #3498db;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .command-list {
+            background: rgba(52, 73, 94, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .command-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .command-item:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .command-item code {
+            background: rgba(231, 76, 60, 0.2);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            color: #e74c3c;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .command-description {
+            color: #bdc3c7;
+            margin-left: 1rem;
+        }
+
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .command-category {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #3498db;
+        }
+
+        .command-category h4 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer p {
+            color: #bdc3c7;
+            margin: 0.5rem 0;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 홈</a>
+            <a href="/crops.html" class="nav-link">🌾 작물 도감</a>
+            <a href="/commands.html" class="nav-link active">⚡ 명령어</a>
+            <a href="/rules.html" class="nav-link">📋 규칙</a>
+            <a href="/plugins.html" class="nav-link">🔧 플러그인</a>
+            <a href="/community.html" class="nav-link">👥 커뮤니티</a>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-container">
+        <div class="page-header">
+            <h1>⚡ 서버 명령어</h1>
+            <p>Wild-Point 서버에서 사용할 수 있는 모든 명령어를 확인하세요</p>
+        </div>
+
+        <div class="content-card">
+            <h2>📋 명령어 가이드</h2>
+            
+            <div class="command-grid">
+                <div class="command-category">
+                    <h4>🏠 이동 관련</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/spawn</code>
+                            <span class="command-description">스폰 지점으로 이동</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/home [홈이름]</code>
+                            <span class="command-description">설정한 집으로 이동</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/sethome [홈이름]</code>
+                            <span class="command-description">현재 위치를 집으로 설정</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/delhome [홈이름]</code>
+                            <span class="command-description">집 삭제</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/back</code>
+                            <span class="command-description">이전 위치로 돌아가기</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/warp [워프이름]</code>
+                            <span class="command-description">워프 지점으로 이동</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/tpa [플레이어]</code>
+                            <span class="command-description">플레이어에게 이동 요청</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/tpaccept</code>
+                            <span class="command-description">이동 요청 수락</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>💰 경제 시스템</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/balance</code> 또는 <code>/돈</code>
+                            <span class="command-description">잔액 확인</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/baltop</code>
+                            <span class="command-description">부자 순위 확인</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/pay [플레이어] [금액]</code>
+                            <span class="command-description">돈 송금</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/worth</code>
+                            <span class="command-description">손에 든 아이템 가격 확인</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>🏪 상점 시스템</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/상점</code>
+                            <span class="command-description">메인 상점 메뉴</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/서버상점</code>
+                            <span class="command-description">서버 공식 상점</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/광물상인</code>
+                            <span class="command-description">광물 상점</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/농작물상인</code>
+                            <span class="command-description">농작물 상점</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/블럭상인</code>
+                            <span class="command-description">블럭 상점</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/인테리어상인</code>
+                            <span class="command-description">인테리어 상점</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>🛒 유저 거래소</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/유저거래소 열기</code>
+                            <span class="command-description">유저 거래소 열기</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/유저거래소 등록 [가격]</code>
+                            <span class="command-description">아이템 등록 (손에 든 아이템)</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/유저거래소 보관함</code>
+                            <span class="command-description">보관함 확인</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>🎣 낚시 시스템</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/낚시</code>
+                            <span class="command-description">낚시 메뉴</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/낚시터</code>
+                            <span class="command-description">낚시터로 이동</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/낚싯대상인</code>
+                            <span class="command-description">낚싯대 구매</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/복합낚싯대</code>
+                            <span class="command-description">복합 낚싯대 제작</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>🎲 미니게임</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/주사위 [금액]</code>
+                            <span class="command-description">주사위 게임 참여</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/룰렛 [금액]</code>
+                            <span class="command-description">룰렛 게임</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/주식</code>
+                            <span class="command-description">주식 메뉴</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>💬 소통 관련</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/msg [플레이어] [메시지]</code>
+                            <span class="command-description">개인 메시지</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/r [메시지]</code>
+                            <span class="command-description">마지막 메시지에 답장</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/ignore [플레이어]</code>
+                            <span class="command-description">플레이어 차단/해제</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/mail send [플레이어] [메시지]</code>
+                            <span class="command-description">메일 전송</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>🎒 인벤토리 관리</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/kit [키트이름]</code>
+                            <span class="command-description">키트 수령</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/kits</code>
+                            <span class="command-description">사용 가능한 키트 목록</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/창고</code>
+                            <span class="command-description">창고 열기</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/쓰레기통</code>
+                            <span class="command-description">쓰레기통 열기</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>🎮 게임 기능</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/메뉴</code>
+                            <span class="command-description">퀵 메뉴 열기</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/야간투시</code> 또는 <code>/야투</code>
+                            <span class="command-description">야간투시 토글</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/밥</code>
+                            <span class="command-description">허기 회복</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/수리</code>
+                            <span class="command-description">아이템 수리</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/제작대</code>
+                            <span class="command-description">제작대 열기</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/야생</code>
+                            <span class="command-description">야생으로 이동</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-category">
+                    <h4>📖 도감 & 정보</h4>
+                    <div class="command-list">
+                        <div class="command-item">
+                            <code>/도감</code>
+                            <span class="command-description">도감 열기</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/도감조회 [플레이어]</code>
+                            <span class="command-description">다른 플레이어 도감 확인</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/list</code>
+                            <span class="command-description">온라인 플레이어 목록</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/ping</code>
+                            <span class="command-description">핑 확인</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/getpos</code>
+                            <span class="command-description">현재 좌표 확인</span>
+                        </div>
+                        <div class="command-item">
+                            <code>/디스코드</code>
+                            <span class="command-description">디스코드 정보</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(52, 152, 219, 0.1); border-radius: 8px; border-left: 4px solid #3498db;">
+                <h4 style="color: #3498db;">💡 사용 팁</h4>
+                <p>• <strong>권한 확인:</strong> 일부 명령어는 특정 권한이 필요할 수 있습니다</p>
+                <p>• <strong>쿨다운:</strong> 대부분의 명령어에는 쿨다운이 적용됩니다</p>
+                <p>• <strong>수수료:</strong> 일부 명령어 사용 시 수수료가 발생할 수 있습니다</p>
+                <p>• <strong>도움말:</strong> <code>/help</code> 명령어로 추가 정보를 확인할 수 있습니다</p>
+                <p>• <strong>한국어 지원:</strong> 대부분의 명령어가 한국어로 사용 가능합니다</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>&copy; 2025 Wild-Point Minecraft Server. All rights reserved.</p>
+        <p>서버 문의: dongkeun.lee@gmail.com | 디스코드: <a href="https://discord.gg/jUQFhhJak2" target="_blank">https://discord.gg/jUQFhhJak2</a></p>
+    </footer>
+</body>
+</html> 

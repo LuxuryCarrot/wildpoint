@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서버 규칙 - Wild-Point Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 상단 네비게이션 */
+        .top-nav {
+            background: rgba(52, 73, 94, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 0 2rem;
+        }
+
+        .nav-link {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        /* 메인 컨텐츠 */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #f39c12, #e67e22, #d35400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .content-card h2 {
+            color: #f39c12;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rules-list {
+            list-style: none;
+            counter-reset: rule-counter;
+            margin: 2rem 0;
+        }
+
+        .rules-list li {
+            counter-increment: rule-counter;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
+            border-radius: 12px;
+            border-left: 4px solid #e74c3c;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .rules-list li:hover {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(192, 57, 43, 0.15));
+            transform: translateX(5px);
+        }
+
+        .rules-list li::before {
+            content: counter(rule-counter);
+            position: absolute;
+            left: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #e74c3c;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .rules-list li strong {
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        .punishment-system {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .punishment-system h4 {
+            color: #e74c3c;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .punishment-level {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+        }
+
+        .punishment-offense {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .punishment-action {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .additional-info {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #3498db;
+        }
+
+        .additional-info h4 {
+            color: #3498db;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .important-note {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(241, 196, 15, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #f1c40f;
+        }
+
+        .important-note h4 {
+            color: #f1c40f;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer p {
+            color: #bdc3c7;
+            margin: 0.5rem 0;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .rules-list li::before {
+                left: -1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                font-size: 0.8rem;
+            }
+
+            .punishment-level {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 홈</a>
+            <a href="/crops.html" class="nav-link">🌾 작물 도감</a>
+            <a href="/commands.html" class="nav-link">⚡ 명령어</a>
+            <a href="/rules.html" class="nav-link active">📋 규칙</a>
+            <a href="/plugins.html" class="nav-link">🔧 플러그인</a>
+            <a href="/community.html" class="nav-link">👥 커뮤니티</a>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-container">
+        <div class="page-header">
+            <h1>📋 서버 규칙</h1>
+            <p>모든 플레이어가 즐겁게 게임할 수 있도록 규칙을 준수해주세요</p>
+        </div>
+
+        <div class="content-card">
+            <h2>📜 Wild-Point 서버 규칙</h2>
+            <p>아래 규칙들은 모든 플레이어가 공정하고 즐거운 게임 환경을 만들기 위해 제정되었습니다.</p>
+            
+            <ol class="rules-list">
+                <li>
+                    <strong>욕설 및 비방 금지</strong><br>
+                    다른 플레이어에 대한 욕설, 비방, 차별적 발언을 금합니다. 모든 플레이어를 존중하며 예의 바른 언어를 사용해주세요.
+                </li>
+                
+                <li>
+                    <strong>그리핑 금지</strong><br>
+                    다른 플레이어의 건축물을 파괴하거나 훼손하는 행위를 금합니다. 다른 사람의 노력을 존중해주세요.
+                </li>
+                
+                <li>
+                    <strong>핵/치트 프로그램 사용 금지</strong><br>
+                    X-Ray, 자동클릭, 플라이핵 등 불공정한 프로그램 사용 시 즉시 영구 밴 처리됩니다.
+                </li>
+                
+                <li>
+                    <strong>스팸 및 광고 금지</strong><br>
+                    채팅창에 같은 내용을 반복하거나 다른 서버 광고, 개인 정보 요구 등의 행위를 금합니다.
+                </li>
+                
+                <li>
+                    <strong>개인정보 보호</strong><br>
+                    다른 플레이어의 개인정보를 요구하거나 공유하지 마세요. 자신의 개인정보도 주의해서 관리하세요.
+                </li>
+                
+                <li>
+                    <strong>버그 악용 금지</strong><br>
+                    서버나 플러그인의 버그를 발견했을 때 악용하지 말고 즉시 관리자에게 신고해주세요.
+                </li>
+                
+                <li>
+                    <strong>AFK 농장 제한</strong><br>
+                    과도한 AFK 농장은 서버 성능에 영향을 줄 수 있어 제한될 수 있습니다. 적정 수준을 유지해주세요.
+                </li>
+                
+                <li>
+                    <strong>건축 가이드라인</strong><br>
+                    공공장소에서는 적절한 크기와 디자인으로 건축해주세요. 다른 플레이어의 시야를 방해하는 건축물은 제한될 수 있습니다.
+                </li>
+                
+                <li>
+                    <strong>계정 공유 금지</strong><br>
+                    자신의 계정을 다른 사람과 공유하거나 다른 사람의 계정을 사용하는 것을 금합니다.
+                </li>
+                
+                <li>
+                    <strong>관리자 사칭 금지</strong><br>
+                    관리자나 운영진을 사칭하는 행위는 엄격히 금지됩니다. 공식 관리자는 특별한 태그를 가지고 있습니다.
+                </li>
+            </ol>
+
+            <div class="punishment-system">
+                <h4>⚠️ 처벌 시스템</h4>
+                <div class="punishment-level">
+                    <span class="punishment-offense">1차 위반</span>
+                    <span class="punishment-action">경고</span>
+                </div>
+                <div class="punishment-level">
+                    <span class="punishment-offense">2차 위반</span>
+                    <span class="punishment-action">1일 정지</span>
+                </div>
+                <div class="punishment-level">
+                    <span class="punishment-offense">3차 위반</span>
+                    <span class="punishment-action">7일 정지</span>
+                </div>
+                <div class="punishment-level">
+                    <span class="punishment-offense">심각한 위반</span>
+                    <span class="punishment-action">영구 밴</span>
+                </div>
+            </div>
+
+            <div class="additional-info">
+                <h4>ℹ️ 추가 정보</h4>
+                <p>• 처벌은 위반의 정도와 횟수에 따라 조정될 수 있습니다</p>
+                <p>• 악의적인 행위나 반복적인 규칙 위반은 더 강한 처벌을 받을 수 있습니다</p>
+                <p>• 처벌에 대한 이의제기는 디스코드를 통해 관리자에게 문의하세요</p>
+                <p>• 규칙은 서버 운영 상황에 따라 변경될 수 있습니다</p>
+            </div>
+
+            <div class="important-note">
+                <h4>⚡ 중요한 안내</h4>
+                <p>• 규칙을 모르거나 실수로 위반한 경우라도 책임을 져야 합니다</p>
+                <p>• 의심스러운 활동이나 규칙 위반을 목격하면 즉시 신고해주세요</p>
+                <p>• 모든 플레이어가 즐겁게 게임할 수 있도록 서로 배려해주세요</p>
+                <p>• 문의사항이 있으면 언제든 관리자에게 연락하세요</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>&copy; 2025 Wild-Point Minecraft Server. All rights reserved.</p>
+        <p>서버 문의: dongkeun.lee@gmail.com | 디스코드: <a href="https://discord.gg/jUQFhhJak2" target="_blank">https://discord.gg/jUQFhhJak2</a></p>
+    </footer>
+</body>
+</html> 

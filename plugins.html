@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서버 플러그인 - Wild-Point Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 상단 네비게이션 */
+        .top-nav {
+            background: rgba(52, 73, 94, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 0 2rem;
+        }
+
+        .nav-link {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        /* 메인 컨텐츠 */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #f39c12, #e67e22, #d35400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .content-card h2 {
+            color: #f39c12;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .plugins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .plugin-card {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plugin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left-color: #e74c3c;
+        }
+
+        .plugin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .plugin-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .plugin-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .plugin-icon {
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .plugin-info h4 {
+            color: #e74c3c;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .plugin-version {
+            color: #95a5a6;
+            font-size: 0.9rem;
+            background: rgba(149, 165, 166, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .plugin-description {
+            color: #bdc3c7;
+            margin: 1rem 0;
+            line-height: 1.7;
+        }
+
+        .plugin-features {
+            margin-top: 1rem;
+        }
+
+        .plugin-features h5 {
+            color: #f39c12;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .plugin-features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .plugin-features li {
+            padding: 0.3rem 0;
+            color: #bdc3c7;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .plugin-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            color: #3498db;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .essential-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .optional-badge {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer p {
+            color: #bdc3c7;
+            margin: 0.5rem 0;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .plugins-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 홈</a>
+            <a href="/crops.html" class="nav-link">🌾 작물 도감</a>
+            <a href="/commands.html" class="nav-link">⚡ 명령어</a>
+            <a href="/rules.html" class="nav-link">📋 규칙</a>
+            <a href="/plugins.html" class="nav-link active">🔧 플러그인</a>
+            <a href="/community.html" class="nav-link">👥 커뮤니티</a>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-container">
+        <div class="page-header">
+            <h1>🔧 서버 플러그인</h1>
+            <p>Wild-Point 서버를 더욱 풍성하게 만드는 플러그인들을 소개합니다</p>
+        </div>
+
+        <div class="content-card">
+            <h2>🚀 핵심 플러그인</h2>
+            
+            <div class="category-section">
+                <h3 class="category-title">⭐ 필수 플러그인</h3>
+                <div class="plugins-grid">
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">🌾</div>
+                            <div class="plugin-info">
+                                <h4>Custom Crops <span class="essential-badge">Essential</span></h4>
+                                <span class="plugin-version">v2.4.1</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            Wild-Point 서버의 핵심 기능인 커스텀 작물 시스템을 제공합니다. 13종류의 다양한 작물과 계절 시스템으로 농업의 재미를 더합니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>13종류의 커스텀 작물</li>
+                                <li>계절별 작물 재배 시스템</li>
+                                <li>성장 단계별 시각적 표현</li>
+                                <li>희귀도 시스템</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">💰</div>
+                            <div class="plugin-info">
+                                <h4>Vault <span class="essential-badge">Essential</span></h4>
+                                <span class="plugin-version">v1.7.3</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            서버 경제 시스템의 기반이 되는 플러그인입니다. 다른 경제 관련 플러그인들이 모두 이 플러그인을 통해 작동합니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>통합 경제 시스템</li>
+                                <li>권한 관리 API</li>
+                                <li>플러그인 간 호환성</li>
+                                <li>안전한 거래 시스템</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">🛡️</div>
+                            <div class="plugin-info">
+                                <h4>WorldGuard <span class="essential-badge">Essential</span></h4>
+                                <span class="plugin-version">v7.0.7</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            플레이어의 건축물과 농장을 안전하게 보호하는 지역 보호 시스템입니다. 그리핑을 방지하고 개인 공간을 보장합니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>지역 보호 시스템</li>
+                                <li>PvP 구역 설정</li>
+                                <li>건축물 보호</li>
+                                <li>플래그 기반 권한 관리</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">✨</div>
+                            <div class="plugin-info">
+                                <h4>EssentialsX <span class="essential-badge">Essential</span></h4>
+                                <span class="plugin-version">v2.19.7</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            서버의 기본적인 명령어와 기능들을 제공하는 필수 플러그인입니다. 텔레포트, 홈 설정, 경제 등 다양한 기능을 포함합니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>기본 명령어 시스템</li>
+                                <li>홈 및 워프 기능</li>
+                                <li>킷 시스템</li>
+                                <li>메시지 및 메일 기능</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h3 class="category-title">🎯 게임플레이 향상</h3>
+                <div class="plugins-grid">
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">🎯</div>
+                            <div class="plugin-info">
+                                <h4>mcMMO <span class="optional-badge">Enhanced</span></h4>
+                                <span class="plugin-version">v2.1.220</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            RPG 요소와 스킬 시스템을 추가하여 게임에 깊이를 더합니다. 다양한 스킬을 레벨업하며 특별한 능력을 획득할 수 있습니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>15가지 스킬 시스템</li>
+                                <li>파티 시스템</li>
+                                <li>특수 능력 발동</li>
+                                <li>스킬 순위표</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">📦</div>
+                            <div class="plugin-info">
+                                <h4>ChestShop <span class="optional-badge">Enhanced</span></h4>
+                                <span class="plugin-version">v3.12.2</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            상자를 이용한 자동 상점 시스템으로 플레이어 간 자유로운 거래를 가능하게 합니다. 경제 활동을 활성화시키는 핵심 플러그인입니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>상자 기반 상점</li>
+                                <li>자동 거래 시스템</li>
+                                <li>상점 보호 기능</li>
+                                <li>거래 로그 기록</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">🏆</div>
+                            <div class="plugin-info">
+                                <h4>AuctionHouse <span class="optional-badge">Enhanced</span></h4>
+                                <span class="plugin-version">v3.4.1</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            글로벌 경매장 시스템으로 서버 전체에서 아이템을 사고팔 수 있습니다. 편리한 GUI를 통해 쉽게 거래할 수 있습니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>글로벌 경매장</li>
+                                <li>입찰 시스템</li>
+                                <li>즉시 구매 기능</li>
+                                <li>검색 및 필터링</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">🏠</div>
+                            <div class="plugin-info">
+                                <h4>GriefPrevention <span class="optional-badge">Enhanced</span></h4>
+                                <span class="plugin-version">v16.18</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            간단한 도구로 땅을 보호할 수 있는 시스템입니다. 골든 삽을 이용해 쉽게 자신의 영역을 설정하고 관리할 수 있습니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>간편한 땅 보호</li>
+                                <li>자동 그리핑 방지</li>
+                                <li>플레이어 신뢰 시스템</li>
+                                <li>PvP 설정 관리</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h3 class="category-title">🔧 유틸리티</h3>
+                <div class="plugins-grid">
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">🌐</div>
+                            <div class="plugin-info">
+                                <h4>DiscordSRV <span class="optional-badge">Utility</span></h4>
+                                <span class="plugin-version">v1.25.1</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            마인크래프트 서버와 디스코드를 연동하여 채팅을 동기화하고 서버 상태를 실시간으로 확인할 수 있게 해주는 플러그인입니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>디스코드 채팅 연동</li>
+                                <li>서버 상태 알림</li>
+                                <li>플레이어 접속 알림</li>
+                                <li>관리자 알림 시스템</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-icon">📊</div>
+                            <div class="plugin-info">
+                                <h4>Plan <span class="optional-badge">Utility</span></h4>
+                                <span class="plugin-version">v5.4.1635</span>
+                            </div>
+                        </div>
+                        <p class="plugin-description">
+                            서버 통계와 플레이어 활동을 분석할 수 있는 웹 기반 대시보드를 제공합니다. 관리자가 서버 상태를 모니터링하는 데 도움이 됩니다.
+                        </p>
+                        <div class="plugin-features">
+                            <h5>주요 기능:</h5>
+                            <ul>
+                                <li>웹 기반 통계</li>
+                                <li>플레이어 활동 분석</li>
+                                <li>서버 성능 모니터링</li>
+                                <li>상세한 리포트 생성</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>&copy; 2025 Wild-Point Minecraft Server. All rights reserved.</p>
+        <p>서버 문의: dongkeun.lee@gmail.com | 디스코드: <a href="https://discord.gg/jUQFhhJak2" target="_blank">https://discord.gg/jUQFhhJak2</a></p>
+    </footer>
+</body>
+</html> 

@@ -1,5 +1,9 @@
 # 특정 페이지 라우팅
-/crops    /crops.html   200
+/crops      /crops.html       200
+/commands   /commands.html    200
+/rules      /rules.html       200
+/plugins    /plugins.html     200
+/community  /community.html   200
 
 # SPA 라우팅 설정 (Single Page Application)
 /*    /index.html   200
