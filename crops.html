@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Crops 카드 도감 - Wild-Point Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 상단 네비게이션 추가 */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .crop-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.1),
+                0 5px 15px rgba(0,0,0,0.07),
+                inset 0 1px 0 rgba(255,255,255,0.6);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .crop-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
+            border-radius: 20px;
+            padding: 3px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .crop-card:hover::before {
+            opacity: 1;
+        }
+
+        .crop-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.15),
+                0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .crop-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crop-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .crop-card:hover .crop-icon::before {
+            animation: shimmer 1.5s ease-in-out infinite;
+            opacity: 1;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .crop-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+
+        .crop-subtitle {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .card-body {
+            margin-bottom: 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .growth-stages {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .stage-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite;
+        }
+
+        .stage-dot:nth-child(2) { animation-delay: 0.2s; }
+        .stage-dot:nth-child(3) { animation-delay: 0.4s; }
+        .stage-dot:nth-child(4) { animation-delay: 0.6s; }
+        .stage-dot:nth-child(5) { animation-delay: 0.8s; }
+        .stage-dot:nth-child(6) { animation-delay: 1s; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .card-footer {
+            text-align: center;
+            padding-top: 15px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .rarity-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rarity-common { background: linear-gradient(135deg, #95a5a6, #7f8c8d); color: white; }
+        .rarity-rare { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        .rarity-epic { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
+        .rarity-legendary { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+
+        .crop-types {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .type-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .seasonal-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .season-spring { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .season-summer { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .season-autumn { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .season-winter { background: linear-gradient(135deg, #3498db, #2980b9); }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .crop-card {
+            opacity: 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 홈</a>
+            <a href="/crops.html" class="nav-link active">🌾 작물 도감</a>
+            <a href="/#commands" class="nav-link">⚡ 명령어</a>
+            <a href="/#rules" class="nav-link">📋 규칙</a>
+            <a href="/#plugins" class="nav-link">🔧 플러그인</a>
+            <a href="/#community" class="nav-link">👥 커뮤니티</a>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>🌾 Custom Crops 도감 🌾</h1>
+        <p>Wild-Point 서버의 커스텀 작물 컬렉션</p>
+    </div>
+
+    <div class="cards-container" id="cardsContainer">
+        <!-- 카드들이 여기에 동적으로 생성됩니다 -->
+    </div>
+
+    <script>
+        // 작물 데이터
+        const cropsData = [
+            { name: "Corn", stages: 4, harvest: "corn_seeds", icon: "🌽", type: "곡물", season: "summer", rarity: "common" },
+            { name: "Tomato", stages: 5, harvest: "tomato_seeds", icon: "🍅", type: "과일", season: "summer", rarity: "common" },
+            { name: "Redpacket", stages: 6, harvest: "redpacket_seeds", icon: "🧧", type: "특수", season: "winter", rarity: "legendary" },
+            { name: "Pitaya", stages: 6, harvest: "pitaya_seeds", icon: "🐉", type: "열대과일", season: "summer", rarity: "epic" },
+            { name: "Pineapple", stages: 4, harvest: "pineapple_seeds", icon: "🍍", type: "열대과일", season: "summer", rarity: "rare" },
+            { name: "Pepper", stages: 5, harvest: "pepper_seeds", icon: "🌶️", type: "향신료", season: "summer", rarity: "common" },
+            { name: "Hop", stages: 4, harvest: "hop_seeds", icon: "🍺", type: "허브", season: "spring", rarity: "rare" },
+            { name: "Grape", stages: 6, harvest: "grape_seeds", icon: "🍇", type: "과일", season: "autumn", rarity: "epic" },
+            { name: "Garlic", stages: 4, harvest: "garlic_seeds", icon: "🧄", type: "향신료", season: "spring", rarity: "common" },
+            { name: "Eggplant", stages: 4, harvest: "eggplant_seeds", icon: "🍆", type: "채소", season: "summer", rarity: "common" },
+            { name: "Cabbage", stages: 4, harvest: "cabbage_seeds", icon: "🥬", type: "채소", season: "autumn", rarity: "common" },
+            { name: "Apple", stages: 6, harvest: "apple", icon: "🍎", type: "과일", season: "autumn", rarity: "epic" },
+            { name: "Chinese Cabbage", stages: 4, harvest: "chinese_cabbage_seeds", icon: "🥗", type: "채소", season: "autumn", rarity: "common" }
+        ];
+
+        const seasonInfo = {
+            spring: { emoji: "🌸", name: "봄", class: "season-spring" },
+            summer: { emoji: "☀️", name: "여름", class: "season-summer" },
+            autumn: { emoji: "🍂", name: "가을", class: "season-autumn" },
+            winter: { emoji: "❄️", name: "겨울", class: "season-winter" }
+        };
+
+        function createCropCard(crop) {
+            const seasonData = seasonInfo[crop.season];
+            const stagesHTML = Array(crop.stages).fill(0).map(() => '<div class="stage-dot"></div>').join('');
+            
+            return `
+                <div class="crop-card">
+                    <div class="seasonal-indicator ${seasonData.class}" title="${seasonData.name}">
+                        ${seasonData.emoji}
+                    </div>
+                    
+                    <div class="card-header">
+                        <div class="crop-icon">
+                            ${crop.icon}
+                        </div>
+                        <h3 class="crop-name">${crop.name}</h3>
+                        <p class="crop-subtitle">${crop.type} • ${seasonData.name}</p>
+                    </div>
+
+                    <div class="crop-types">
+                        <span class="type-badge">${crop.type}</span>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="stat-row">
+                            <span class="stat-label">🌱 성장 단계</span>
+                            <span class="stat-value">${crop.stages}단계</span>
+                        </div>
+                        
+                        <div class="growth-stages">
+                            ${stagesHTML}
+                        </div>
+
+                        <div class="stat-row">
+                            <span class="stat-label">🎯 수확 아이템</span>
+                            <span class="stat-value">${crop.harvest || 'N/A'}</span>
+                        </div>
+
+                        <div class="stat-row">
+                            <span class="stat-label">📍 엔티티 타입</span>
+                            <span class="stat-value">Item Frame</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="rarity-badge rarity-${crop.rarity}">
+                            ${crop.rarity.toUpperCase()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 카드 생성 및 렌더링
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = cropsData.map(crop => createCropCard(crop)).join('');
+        }
+
+        // 페이지 로드 시 카드 렌더링
+        document.addEventListener('DOMContentLoaded', renderCards);
+
+        // 카드 호버 시 추가 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.crop-card');
+                cards.forEach((card, index) => {
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.style.animation = 'slideInUp 0.6s ease-out forwards';
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

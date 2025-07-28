@@ -389,7 +389,7 @@
     <nav class="nav-container">
         <div class="nav">
             <button class="nav-item active" onclick="showSection('home')">🏠 홈</button>
-            <button class="nav-item" onclick="showSection('crops')">🌾 작물 도감</button>
+            <a href="/crops.html" class="nav-item">🌾 작물 도감</a>
             <button class="nav-item" onclick="showSection('commands')">⚡ 명령어</button>
             <button class="nav-item" onclick="showSection('rules')">📋 규칙</button>
             <button class="nav-item" onclick="showSection('plugins')">🔧 플러그인</button>
@@ -444,17 +444,7 @@
             </div>
         </section>
 
-        <!-- 작물 도감 섹션 -->
-        <section id="crops" class="content-section">
-            <div class="wiki-card">
-                <h2>🌾 커스텀 작물 도감</h2>
-                <p>Wild-Point 서버의 13종류 커스텀 작물들을 소개합니다. 각 작물마다 고유한 성장 단계와 특성을 가지고 있습니다.</p>
-                
-                <div class="crops-grid" id="cropsGrid">
-                    <!-- 작물 카드들이 여기에 동적으로 생성됩니다 -->
-                </div>
-            </div>
-        </section>
+        <!-- 작물 도감 섹션은 별도 페이지로 이동 -->
 
         <!-- 명령어 섹션 -->
         <section id="commands" class="content-section">
@@ -663,58 +653,9 @@
             
             // 선택된 네비게이션 아이템 활성화
             event.target.classList.add('active');
-
-            // 작물 섹션이 선택되면 작물 카드 렌더링
-            if (sectionId === 'crops') {
-                renderCropsGrid();
-            }
         }
 
-        // 작물 카드 생성 함수
-        function createCropCard(crop) {
-            const stagesHTML = Array(crop.stages).fill(0).map(() => '<div class="stage-dot"></div>').join('');
-            
-            return `
-                <div class="crop-card">
-                    <div class="crop-header">
-                        <div class="crop-icon">${crop.icon}</div>
-                        <div class="crop-name">${crop.name}</div>
-                        <div class="crop-type">${crop.type} • ${crop.season}</div>
-                    </div>
-                    
-                    <div class="growth-stages">
-                        ${stagesHTML}
-                    </div>
-                    
-                    <div class="crop-stats">
-                        <div class="stat-row">
-                            <span>성장 단계</span>
-                            <span>${crop.stages}단계</span>
-                        </div>
-                        <div class="stat-row">
-                            <span>수확 아이템</span>
-                            <span>${crop.harvest || 'N/A'}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span>재배 계절</span>
-                            <span>${crop.season}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span>작물 타입</span>
-                            <span>${crop.type}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // 작물 그리드 렌더링 함수
-        function renderCropsGrid() {
-            const grid = document.getElementById('cropsGrid');
-            if (grid && !grid.hasChildNodes()) {
-                grid.innerHTML = cropsData.map(crop => createCropCard(crop)).join('');
-            }
-        }
+        // 작물 관련 함수들은 crops.html로 이동됨
 
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
@@ -741,11 +682,10 @@
                 observer.observe(card);
             });
 
-            // 네비게이션 클릭 이벤트 추가
-            document.querySelectorAll('.nav-item').forEach(item => {
+            // 네비게이션 클릭 이벤트 추가 (버튼만 처리, 링크는 제외)
+            document.querySelectorAll('.nav-item[onclick]').forEach(item => {
                 item.addEventListener('click', function() {
                     const sectionId = this.textContent.includes('홈') ? 'home' :
-                                    this.textContent.includes('작물') ? 'crops' :
                                     this.textContent.includes('명령어') ? 'commands' :
                                     this.textContent.includes('규칙') ? 'rules' :
                                     this.textContent.includes('플러그인') ? 'plugins' :
