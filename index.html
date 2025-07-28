@@ -1,731 +1,731 @@
-!DOCTYPE html
-html lang=ko
-head
-    meta charset=UTF-8
-    meta name=viewport content=width=device-width, initial-scale=1.0
-    titleWild-Point Server Wikititle
-    style
-         {
-            margin 0;
-            padding 0;
-            box-sizing border-box;
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild-Point Server Wiki</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color #e0e0e0;
-            line-height 1.6;
-            min-height 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
         }
 
-         헤더 
+        /* 헤더 */
         .header {
-            background linear-gradient(135deg, #2c3e50, #34495e);
-            padding 2rem 0;
-            text-align center;
-            box-shadow 0 4px 20px rgba(0,0,0,0.3);
-            position relative;
-            overflow hidden;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .headerbefore {
-            content '';
-            position absolute;
-            top 0;
-            left 0;
-            right 0;
-            bottom 0;
-            background url('dataimagesvg+xml,svg xmlns=httpwww.w3.org2000svg viewBox=0 0 100 100defspattern id=grain width=100 height=100 patternUnits=userSpaceOnUsecircle cx=25 cy=25 r=1 fill=%23ffffff opacity=0.1circle cx=75 cy=75 r=1 fill=%23ffffff opacity=0.1circle cx=50 cy=10 r=1 fill=%23ffffff opacity=0.05patterndefsrect width=100 height=100 fill=url(%23grain)svg');
-            opacity 0.3;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
         }
 
         .server-logo {
-            font-size 4rem;
-            font-weight bold;
-            background linear-gradient(45deg, #f39c12, #e67e22, #d35400);
-            -webkit-background-clip text;
-            -webkit-text-fill-color transparent;
-            margin-bottom 0.5rem;
-            text-shadow 2px 2px 4px rgba(0,0,0,0.3);
-            position relative;
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f39c12, #e67e22, #d35400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
         }
 
         .server-subtitle {
-            font-size 1.3rem;
-            color #bdc3c7;
-            margin-bottom 1rem;
+            font-size: 1.3rem;
+            color: #bdc3c7;
+            margin-bottom: 1rem;
         }
 
         .server-status {
-            display inline-flex;
-            align-items center;
-            gap 0.5rem;
-            background rgba(46, 204, 113, 0.2);
-            padding 0.5rem 1rem;
-            border-radius 25px;
-            border 2px solid #2ecc71;
-            font-weight bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(46, 204, 113, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 2px solid #2ecc71;
+            font-weight: bold;
         }
 
         .status-dot {
-            width 10px;
-            height 10px;
-            background #2ecc71;
-            border-radius 50%;
-            animation pulse 2s infinite;
+            width: 10px;
+            height: 10px;
+            background: #2ecc71;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity 1; transform scale(1); }
-            50% { opacity 0.7; transform scale(1.1); }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
         }
 
-         네비게이션 
+        /* 네비게이션 */
         .nav-container {
-            background rgba(52, 73, 94, 0.95);
-            backdrop-filter blur(10px);
-            padding 1rem 0;
-            position sticky;
-            top 0;
-            z-index 1000;
-            box-shadow 0 2px 10px rgba(0,0,0,0.2);
+            background: rgba(52, 73, 94, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .nav {
-            max-width 1200px;
-            margin 0 auto;
-            display flex;
-            justify-content center;
-            flex-wrap wrap;
-            gap 1rem;
-            padding 0 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0 2rem;
         }
 
         .nav-item {
-            padding 0.8rem 1.5rem;
-            background linear-gradient(135deg, #3498db, #2980b9);
-            color white;
-            text-decoration none;
-            border-radius 25px;
-            font-weight 600;
-            transition all 0.3s ease;
-            cursor pointer;
-            border none;
-            font-size 1rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
         }
 
-        .nav-itemhover, .nav-item.active {
-            background linear-gradient(135deg, #e74c3c, #c0392b);
-            transform translateY(-2px);
-            box-shadow 0 5px 15px rgba(0,0,0,0.2);
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-         메인 컨텐츠 
+        /* 메인 컨텐츠 */
         .main-container {
-            max-width 1200px;
-            margin 2rem auto;
-            padding 0 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
         }
 
         .content-section {
-            display none;
-            animation fadeIn 0.5s ease-in;
+            display: none;
+            animation: fadeIn 0.5s ease-in;
         }
 
         .content-section.active {
-            display block;
+            display: block;
         }
 
         @keyframes fadeIn {
-            from { opacity 0; transform translateY(20px); }
-            to { opacity 1; transform translateY(0); }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .wiki-card {
-            background linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            backdrop-filter blur(10px);
-            border-radius 15px;
-            padding 2rem;
-            margin-bottom 2rem;
-            border 1px solid rgba(255,255,255,0.1);
-            box-shadow 0 8px 32px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
 
         .wiki-card h2 {
-            color #f39c12;
-            font-size 2rem;
-            margin-bottom 1rem;
-            display flex;
-            align-items center;
-            gap 0.5rem;
+            color: #f39c12;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .wiki-card h3 {
-            color #3498db;
-            font-size 1.5rem;
-            margin 1.5rem 0 1rem 0;
-            border-bottom 2px solid #3498db;
-            padding-bottom 0.5rem;
+            color: #3498db;
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
         }
 
         .server-info-grid {
-            display grid;
-            grid-template-columns repeat(auto-fit, minmax(300px, 1fr));
-            gap 1.5rem;
-            margin 2rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
 
         .info-card {
-            background linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
-            padding 1.5rem;
-            border-radius 10px;
-            border-left 4px solid #3498db;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
         }
 
         .info-card h4 {
-            color #e74c3c;
-            margin-bottom 0.5rem;
-            font-size 1.2rem;
+            color: #e74c3c;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
         }
 
         .server-address {
-            background rgba(46, 204, 113, 0.2);
-            padding 1rem;
-            border-radius 10px;
-            font-family 'Courier New', monospace;
-            font-size 1.2rem;
-            text-align center;
-            margin 1rem 0;
-            border 2px solid #2ecc71;
+            background: rgba(46, 204, 113, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            margin: 1rem 0;
+            border: 2px solid #2ecc71;
         }
 
         .command-list {
-            background rgba(52, 73, 94, 0.3);
-            padding 1rem;
-            border-radius 10px;
-            margin 1rem 0;
+            background: rgba(52, 73, 94, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
         }
 
         .command-item {
-            display flex;
-            justify-content space-between;
-            align-items center;
-            padding 0.5rem;
-            margin 0.2rem 0;
-            background rgba(255,255,255,0.05);
-            border-radius 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            margin: 0.2rem 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
         }
 
         .command-item code {
-            background rgba(231, 76, 60, 0.2);
-            padding 0.2rem 0.5rem;
-            border-radius 4px;
-            color #e74c3c;
-            font-family 'Courier New', monospace;
+            background: rgba(231, 76, 60, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: #e74c3c;
+            font-family: 'Courier New', monospace;
         }
 
-         작물 도감 스타일 
+        /* 작물 도감 스타일 */
         .crops-grid {
-            display grid;
-            grid-template-columns repeat(auto-fit, minmax(280px, 1fr));
-            gap 1.5rem;
-            margin 2rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
 
         .crop-card {
-            background linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border-radius 15px;
-            padding 1.5rem;
-            box-shadow 0 8px 32px rgba(0,0,0,0.2);
-            backdrop-filter blur(10px);
-            border 1px solid rgba(255,255,255,0.1);
-            transition all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .crop-cardhover {
-            transform translateY(-5px);
-            box-shadow 0 15px 40px rgba(0,0,0,0.3);
-            border-color rgba(243, 156, 18, 0.5);
+        .crop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-color: rgba(243, 156, 18, 0.5);
         }
 
         .crop-header {
-            text-align center;
-            margin-bottom 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
         }
 
         .crop-icon {
-            font-size 3rem;
-            margin-bottom 0.5rem;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
         }
 
         .crop-name {
-            font-size 1.3rem;
-            font-weight bold;
-            color #f39c12;
-            margin-bottom 0.3rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 0.3rem;
         }
 
         .crop-type {
-            color #bdc3c7;
-            font-size 0.9rem;
+            color: #bdc3c7;
+            font-size: 0.9rem;
         }
 
         .crop-stats {
-            margin-top 1rem;
+            margin-top: 1rem;
         }
 
         .stat-row {
-            display flex;
-            justify-content space-between;
-            padding 0.5rem 0;
-            border-bottom 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .stat-rowlast-child {
-            border-bottom none;
+        .stat-row:last-child {
+            border-bottom: none;
         }
 
         .growth-stages {
-            display flex;
-            justify-content center;
-            gap 5px;
-            margin 1rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin: 1rem 0;
         }
 
         .stage-dot {
-            width 8px;
-            height 8px;
-            border-radius 50%;
-            background linear-gradient(135deg, #f39c12, #e67e22);
-            animation glow 2s infinite;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            animation: glow 2s infinite;
         }
 
-        .stage-dotnth-child(2) { animation-delay 0.2s; }
-        .stage-dotnth-child(3) { animation-delay 0.4s; }
-        .stage-dotnth-child(4) { animation-delay 0.6s; }
-        .stage-dotnth-child(5) { animation-delay 0.8s; }
-        .stage-dotnth-child(6) { animation-delay 1s; }
+        .stage-dot:nth-child(2) { animation-delay: 0.2s; }
+        .stage-dot:nth-child(3) { animation-delay: 0.4s; }
+        .stage-dot:nth-child(4) { animation-delay: 0.6s; }
+        .stage-dot:nth-child(5) { animation-delay: 0.8s; }
+        .stage-dot:nth-child(6) { animation-delay: 1s; }
 
         @keyframes glow {
-            0%, 100% { opacity 0.5; transform scale(1); }
-            50% { opacity 1; transform scale(1.2); }
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
         .rules-list {
-            list-style none;
-            counter-reset rule-counter;
+            list-style: none;
+            counter-reset: rule-counter;
         }
 
         .rules-list li {
-            counter-increment rule-counter;
-            padding 1rem;
-            margin 0.5rem 0;
-            background linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
-            border-radius 8px;
-            border-left 4px solid #e74c3c;
-            position relative;
+            counter-increment: rule-counter;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+            position: relative;
         }
 
-        .rules-list libefore {
-            content counter(rule-counter);
-            position absolute;
-            left -2rem;
-            top 50%;
-            transform translateY(-50%);
-            background #e74c3c;
-            color white;
-            width 1.5rem;
-            height 1.5rem;
-            border-radius 50%;
-            display flex;
-            align-items center;
-            justify-content center;
-            font-weight bold;
-            font-size 0.8rem;
+        .rules-list li::before {
+            content: counter(rule-counter);
+            position: absolute;
+            left: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #e74c3c;
+            color: white;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
         }
 
         .footer {
-            background linear-gradient(135deg, #2c3e50, #34495e);
-            padding 2rem 0;
-            text-align center;
-            margin-top 4rem;
-            border-top 1px solid rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         .footer p {
-            color #bdc3c7;
-            margin 0.5rem 0;
+            color: #bdc3c7;
+            margin: 0.5rem 0;
         }
 
-        @media (max-width 768px) {
+        @media (max-width: 768px) {
             .nav {
-                flex-direction column;
-                align-items center;
+                flex-direction: column;
+                align-items: center;
             }
             
             .server-logo {
-                font-size 2.5rem;
+                font-size: 2.5rem;
             }
             
             .main-container {
-                padding 0 1rem;
+                padding: 0 1rem;
             }
         }
-    style
-head
-body
-    !-- 헤더 --
-    header class=header
-        div class=server-logo🌟 Wild-Point 🌟div
-        div class=server-subtitle프리미엄 마인크래프트 서버div
-        div class=server-status
-            div class=status-dotdiv
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="server-logo">🌟 Wild-Point 🌟</div>
+        <div class="server-subtitle">프리미엄 마인크래프트 서버</div>
+        <div class="server-status">
+            <div class="status-dot"></div>
             서버 온라인
-        div
-    header
+        </div>
+    </header>
 
-    !-- 네비게이션 --
-    nav class=nav-container
-        div class=nav
-            button class=nav-item active onclick=showSection('home')🏠 홈button
-            button class=nav-item onclick=showSection('crops')🌾 작물 도감button
-            button class=nav-item onclick=showSection('commands')⚡ 명령어button
-            button class=nav-item onclick=showSection('rules')📋 규칙button
-            button class=nav-item onclick=showSection('plugins')🔧 플러그인button
-            button class=nav-item onclick=showSection('community')👥 커뮤니티button
-        div
-    nav
+    <!-- 네비게이션 -->
+    <nav class="nav-container">
+        <div class="nav">
+            <button class="nav-item active" onclick="showSection('home')">🏠 홈</button>
+            <button class="nav-item" onclick="showSection('crops')">🌾 작물 도감</button>
+            <button class="nav-item" onclick="showSection('commands')">⚡ 명령어</button>
+            <button class="nav-item" onclick="showSection('rules')">📋 규칙</button>
+            <button class="nav-item" onclick="showSection('plugins')">🔧 플러그인</button>
+            <button class="nav-item" onclick="showSection('community')">👥 커뮤니티</button>
+        </div>
+    </nav>
 
-    !-- 메인 컨텐츠 --
-    main class=main-container
-        !-- 홈 섹션 --
-        section id=home class=content-section active
-            div class=wiki-card
-                h2🏠 Wild-Point 서버에 오신 것을 환영합니다!h2
-                pWild-Point는 다양한 커스텀 콘텐츠와 플러그인으로 가득한 프리미엄 마인크래프트 서버입니다. 커스텀 작물 재배부터 특별한 아이템까지, 바닐라와는 다른 특별한 경험을 제공합니다.p
+    <!-- 메인 컨텐츠 -->
+    <main class="main-container">
+        <!-- 홈 섹션 -->
+        <section id="home" class="content-section active">
+            <div class="wiki-card">
+                <h2>🏠 Wild-Point 서버에 오신 것을 환영합니다!</h2>
+                <p>Wild-Point는 다양한 커스텀 콘텐츠와 플러그인으로 가득한 프리미엄 마인크래프트 서버입니다. 커스텀 작물 재배부터 특별한 아이템까지, 바닐라와는 다른 특별한 경험을 제공합니다.</p>
                 
-                div class=server-address
+                <div class="server-address">
                     wild-point.server.com
-                div
+                </div>
 
-                div class=server-info-grid
-                    div class=info-card
-                        h4🎮 서버 정보h4
-                        pstrong버전strong 1.20+p
-                        pstrong모드strong 서바이벌 + 커스텀p
-                        pstrong최대 인원strong 100명p
-                        pstrong난이도strong 보통p
-                    div
+                <div class="server-info-grid">
+                    <div class="info-card">
+                        <h4>🎮 서버 정보</h4>
+                        <p><strong>버전:</strong> 1.20+</p>
+                        <p><strong>모드:</strong> 서바이벌 + 커스텀</p>
+                        <p><strong>최대 인원:</strong> 100명</p>
+                        <p><strong>난이도:</strong> 보통</p>
+                    </div>
                     
-                    div class=info-card
-                        h4🌟 주요 특징h4
-                        p• 13종류의 커스텀 작물p
-                        p• 계절 시스템p
-                        p• 경제 시스템p
-                        p• PvP 구역p
-                        p• 커스텀 인챈트p
-                    div
+                    <div class="info-card">
+                        <h4>🌟 주요 특징</h4>
+                        <p>• 13종류의 커스텀 작물</p>
+                        <p>• 계절 시스템</p>
+                        <p>• 경제 시스템</p>
+                        <p>• PvP 구역</p>
+                        <p>• 커스텀 인챈트</p>
+                    </div>
                     
-                    div class=info-card
-                        h4⏰ 서버 시간h4
-                        pstrong타임존strong KST (한국 시간)p
-                        pstrong리셋strong 매일 오전 4시p
-                        pstrong백업strong 6시간마다p
-                    div
+                    <div class="info-card">
+                        <h4>⏰ 서버 시간</h4>
+                        <p><strong>타임존:</strong> KST (한국 시간)</p>
+                        <p><strong>리셋:</strong> 매일 오전 4시</p>
+                        <p><strong>백업:</strong> 6시간마다</p>
+                    </div>
                     
-                    div class=info-card
-                        h4📞 문의h4
-                        pstrong디스코드strong discord.ggwildpointp
-                        pstrong이메일strong admin@wild-point.comp
-                        pstrong웹사이트strong www.wild-point.comp
-                    div
-                div
-            div
-        section
+                    <div class="info-card">
+                        <h4>📞 문의</h4>
+                        <p><strong>디스코드:</strong> discord.gg/wildpoint</p>
+                        <p><strong>이메일:</strong> admin@wild-point.com</p>
+                        <p><strong>웹사이트:</strong> www.wild-point.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        !-- 작물 도감 섹션 --
-        section id=crops class=content-section
-            div class=wiki-card
-                h2🌾 커스텀 작물 도감h2
-                pWild-Point 서버의 13종류 커스텀 작물들을 소개합니다. 각 작물마다 고유한 성장 단계와 특성을 가지고 있습니다.p
+        <!-- 작물 도감 섹션 -->
+        <section id="crops" class="content-section">
+            <div class="wiki-card">
+                <h2>🌾 커스텀 작물 도감</h2>
+                <p>Wild-Point 서버의 13종류 커스텀 작물들을 소개합니다. 각 작물마다 고유한 성장 단계와 특성을 가지고 있습니다.</p>
                 
-                div class=crops-grid id=cropsGrid
-                    !-- 작물 카드들이 여기에 동적으로 생성됩니다 --
-                div
-            div
-        section
+                <div class="crops-grid" id="cropsGrid">
+                    <!-- 작물 카드들이 여기에 동적으로 생성됩니다 -->
+                </div>
+            </div>
+        </section>
 
-        !-- 명령어 섹션 --
-        section id=commands class=content-section
-            div class=wiki-card
-                h2⚡ 서버 명령어h2
+        <!-- 명령어 섹션 -->
+        <section id="commands" class="content-section">
+            <div class="wiki-card">
+                <h2>⚡ 서버 명령어</h2>
                 
-                h3🌾 작물 관련 명령어h3
-                div class=command-list
-                    div class=command-item
-                        spancodecrops infocode - 작물 정보 확인span
-                    div
-                    div class=command-item
-                        spancodecrops give [작물명]code - 작물 씨앗 지급 (관리자)span
-                    div
-                    div class=command-item
-                        spancodeseasoncode - 현재 계절 확인span
-                    div
-                div
+                <h3>🌾 작물 관련 명령어</h3>
+                <div class="command-list">
+                    <div class="command-item">
+                        <span><code>/crops info</code> - 작물 정보 확인</span>
+                    </div>
+                    <div class="command-item">
+                        <span><code>/crops give [작물명]</code> - 작물 씨앗 지급 (관리자)</span>
+                    </div>
+                    <div class="command-item">
+                        <span><code>/season</code> - 현재 계절 확인</span>
+                    </div>
+                </div>
 
-                h3💰 경제 명령어h3
-                div class=command-list
-                    div class=command-item
-                        spancodemoneycode - 잔액 확인span
-                    div
-                    div class=command-item
-                        spancodepay [플레이어] [금액]code - 돈 송금span
-                    div
-                    div class=command-item
-                        spancodeshopcode - 상점 열기span
-                    div
-                div
+                <h3>💰 경제 명령어</h3>
+                <div class="command-list">
+                    <div class="command-item">
+                        <span><code>/money</code> - 잔액 확인</span>
+                    </div>
+                    <div class="command-item">
+                        <span><code>/pay [플레이어] [금액]</code> - 돈 송금</span>
+                    </div>
+                    <div class="command-item">
+                        <span><code>/shop</code> - 상점 열기</span>
+                    </div>
+                </div>
 
-                h3🏠 기본 명령어h3
-                div class=command-list
-                    div class=command-item
-                        spancodespawncode - 스폰 지점으로 이동span
-                    div
-                    div class=command-item
-                        spancodehomecode - 집으로 이동span
-                    div
-                    div class=command-item
-                        spancodesethomecode - 집 설정span
-                    div
-                    div class=command-item
-                        spancodetpa [플레이어]code - 플레이어에게 텔레포트 요청span
-                    div
-                div
-            div
-        section
+                <h3>🏠 기본 명령어</h3>
+                <div class="command-list">
+                    <div class="command-item">
+                        <span><code>/spawn</code> - 스폰 지점으로 이동</span>
+                    </div>
+                    <div class="command-item">
+                        <span><code>/home</code> - 집으로 이동</span>
+                    </div>
+                    <div class="command-item">
+                        <span><code>/sethome</code> - 집 설정</span>
+                    </div>
+                    <div class="command-item">
+                        <span><code>/tpa [플레이어]</code> - 플레이어에게 텔레포트 요청</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        !-- 규칙 섹션 --
-        section id=rules class=content-section
-            div class=wiki-card
-                h2📋 서버 규칙h2
-                p모든 플레이어가 즐겁게 게임할 수 있도록 다음 규칙을 준수해주세요.p
+        <!-- 규칙 섹션 -->
+        <section id="rules" class="content-section">
+            <div class="wiki-card">
+                <h2>📋 서버 규칙</h2>
+                <p>모든 플레이어가 즐겁게 게임할 수 있도록 다음 규칙을 준수해주세요.</p>
                 
-                ol class=rules-list
-                    listrong욕설 및 비방 금지strong - 다른 플레이어에 대한 욕설, 비방, 차별적 발언을 금합니다.li
-                    listrong그리핑 금지strong - 다른 플레이어의 건축물을 파괴하거나 훼손하는 행위를 금합니다.li
-                    listrong핵치트 프로그램 사용 금지strong - X-Ray, 자동클릭 등 불공정한 프로그램 사용 시 영구 밴됩니다.li
-                    listrong스팸 금지strong - 채팅창에 같은 내용을 반복하거나 광고성 메시지를 금합니다.li
-                    listrong개인정보 보호strong - 다른 플레이어의 개인정보를 요구하거나 공유하지 마세요.li
-                    listrong버그 악용 금지strong - 서버나 플러그인의 버그를 악용하지 마세요. 발견 시 관리자에게 신고해주세요.li
-                    listrongAFK 농장 제한strong - 과도한 AFK 농장은 서버 성능에 영향을 줄 수 있어 제한될 수 있습니다.li
-                    listrong건축 가이드라인strong - 공공장소에서는 적절한 크기와 디자인으로 건축해주세요.li
-                ol
+                <ol class="rules-list">
+                    <li><strong>욕설 및 비방 금지</strong> - 다른 플레이어에 대한 욕설, 비방, 차별적 발언을 금합니다.</li>
+                    <li><strong>그리핑 금지</strong> - 다른 플레이어의 건축물을 파괴하거나 훼손하는 행위를 금합니다.</li>
+                    <li><strong>핵/치트 프로그램 사용 금지</strong> - X-Ray, 자동클릭 등 불공정한 프로그램 사용 시 영구 밴됩니다.</li>
+                    <li><strong>스팸 금지</strong> - 채팅창에 같은 내용을 반복하거나 광고성 메시지를 금합니다.</li>
+                    <li><strong>개인정보 보호</strong> - 다른 플레이어의 개인정보를 요구하거나 공유하지 마세요.</li>
+                    <li><strong>버그 악용 금지</strong> - 서버나 플러그인의 버그를 악용하지 마세요. 발견 시 관리자에게 신고해주세요.</li>
+                    <li><strong>AFK 농장 제한</strong> - 과도한 AFK 농장은 서버 성능에 영향을 줄 수 있어 제한될 수 있습니다.</li>
+                    <li><strong>건축 가이드라인</strong> - 공공장소에서는 적절한 크기와 디자인으로 건축해주세요.</li>
+                </ol>
                 
-                div style=margin-top 2rem; padding 1rem; background rgba(231, 76, 60, 0.1); border-radius 8px; border-left 4px solid #e74c3c;
-                    h4 style=color #e74c3c;⚠️ 처벌 시스템h4
-                    pstrong1차 위반strong 경고br
-                    strong2차 위반strong 1일 정지br
-                    strong3차 위반strong 7일 정지br
-                    strong심각한 위반strong 영구 밴p
-                div
-            div
-        section
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(231, 76, 60, 0.1); border-radius: 8px; border-left: 4px solid #e74c3c;">
+                    <h4 style="color: #e74c3c;">⚠️ 처벌 시스템</h4>
+                    <p><strong>1차 위반:</strong> 경고<br>
+                    <strong>2차 위반:</strong> 1일 정지<br>
+                    <strong>3차 위반:</strong> 7일 정지<br>
+                    <strong>심각한 위반:</strong> 영구 밴</p>
+                </div>
+            </div>
+        </section>
 
-        !-- 플러그인 섹션 --
-        section id=plugins class=content-section
-            div class=wiki-card
-                h2🔧 서버 플러그인h2
-                pWild-Point 서버에서 사용 중인 주요 플러그인들을 소개합니다.p
+        <!-- 플러그인 섹션 -->
+        <section id="plugins" class="content-section">
+            <div class="wiki-card">
+                <h2>🔧 서버 플러그인</h2>
+                <p>Wild-Point 서버에서 사용 중인 주요 플러그인들을 소개합니다.</p>
                 
-                div class=server-info-grid
-                    div class=info-card
-                        h4🌾 Custom Cropsh4
-                        p13종류의 커스텀 작물과 계절 시스템을 제공합니다. 각 작물은 고유한 성장 단계와 수확 아이템을 가지고 있습니다.p
-                    div
+                <div class="server-info-grid">
+                    <div class="info-card">
+                        <h4>🌾 Custom Crops</h4>
+                        <p>13종류의 커스텀 작물과 계절 시스템을 제공합니다. 각 작물은 고유한 성장 단계와 수확 아이템을 가지고 있습니다.</p>
+                    </div>
                     
-                    div class=info-card
-                        h4💰 Vaulth4
-                        p서버 경제 시스템의 기반이 되는 플러그인입니다. 돈을 벌고 거래할 수 있습니다.p
-                    div
+                    <div class="info-card">
+                        <h4>💰 Vault</h4>
+                        <p>서버 경제 시스템의 기반이 되는 플러그인입니다. 돈을 벌고 거래할 수 있습니다.</p>
+                    </div>
                     
-                    div class=info-card
-                        h4🛡️ WorldGuardh4
-                        p지역 보호 시스템으로 건축물과 농장을 안전하게 보호합니다.p
-                    div
+                    <div class="info-card">
+                        <h4>🛡️ WorldGuard</h4>
+                        <p>지역 보호 시스템으로 건축물과 농장을 안전하게 보호합니다.</p>
+                    </div>
                     
-                    div class=info-card
-                        h4✨ EssentialsXh4
-                        p기본적인 서버 명령어와 기능들을 제공합니다.p
-                    div
+                    <div class="info-card">
+                        <h4>✨ EssentialsX</h4>
+                        <p>기본적인 서버 명령어와 기능들을 제공합니다.</p>
+                    </div>
                     
-                    div class=info-card
-                        h4📦 ChestShoph4
-                        p상자를 이용한 자동 상점 시스템입니다.p
-                    div
+                    <div class="info-card">
+                        <h4>📦 ChestShop</h4>
+                        <p>상자를 이용한 자동 상점 시스템입니다.</p>
+                    </div>
                     
-                    div class=info-card
-                        h4🎯 mcMMOh4
-                        pRPG 요소와 스킬 시스템을 추가합니다.p
-                    div
-                div
-            div
-        section
+                    <div class="info-card">
+                        <h4>🎯 mcMMO</h4>
+                        <p>RPG 요소와 스킬 시스템을 추가합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        !-- 커뮤니티 섹션 --
-        section id=community class=content-section
-            div class=wiki-card
-                h2👥 커뮤니티h2
+        <!-- 커뮤니티 섹션 -->
+        <section id="community" class="content-section">
+            <div class="wiki-card">
+                <h2>👥 커뮤니티</h2>
                 
-                h3💬 디스코드 서버h3
-                pWild-Point의 공식 디스코드 서버에 참여하여 다른 플레이어들과 소통하세요!p
-                div class=server-address
-                    discord.ggwildpoint
-                div
+                <h3>💬 디스코드 서버</h3>
+                <p>Wild-Point의 공식 디스코드 서버에 참여하여 다른 플레이어들과 소통하세요!</p>
+                <div class="server-address">
+                    discord.gg/wildpoint
+                </div>
                 
-                h3📢 공지사항h3
-                div class=info-card
-                    h4🎉 최신 업데이트 (2025.01.29)h4
-                    p• 새로운 커스텀 작물 3종 추가 예정br
-                    • 계절 시스템 개선br
-                    • 경제 밸런스 조정br
-                    • 버그 수정 및 성능 개선p
-                div
+                <h3>📢 공지사항</h3>
+                <div class="info-card">
+                    <h4>🎉 최신 업데이트 (2025.01.29)</h4>
+                    <p>• 새로운 커스텀 작물 3종 추가 예정<br>
+                    • 계절 시스템 개선<br>
+                    • 경제 밸런스 조정<br>
+                    • 버그 수정 및 성능 개선</p>
+                </div>
                 
-                h3🏆 이벤트h3
-                div class=info-card
-                    h4🌾 농업 대회h4
-                    pstrong기간strong 매월 첫째 주br
-                    strong내용strong 가장 많은 작물을 수확한 플레이어 시상br
-                    strong보상strong 특별 아이템 + 게임머니p
-                div
+                <h3>🏆 이벤트</h3>
+                <div class="info-card">
+                    <h4>🌾 농업 대회</h4>
+                    <p><strong>기간:</strong> 매월 첫째 주<br>
+                    <strong>내용:</strong> 가장 많은 작물을 수확한 플레이어 시상<br>
+                    <strong>보상:</strong> 특별 아이템 + 게임머니</p>
+                </div>
                 
-                h3📊 서버 통계h3
-                div class=server-info-grid
-                    div class=info-card
-                        h4👤 플레이어h4
-                        pstrong총 가입자strong 1,247명br
-                        strong활성 플레이어strong 89명br
-                        strong현재 접속strong 23명p
-                    div
+                <h3>📊 서버 통계</h3>
+                <div class="server-info-grid">
+                    <div class="info-card">
+                        <h4>👤 플레이어</h4>
+                        <p><strong>총 가입자:</strong> 1,247명<br>
+                        <strong>활성 플레이어:</strong> 89명<br>
+                        <strong>현재 접속:</strong> 23명</p>
+                    </div>
                     
-                    div class=info-card
-                        h4🌾 작물 통계h4
-                        pstrong총 수확량strong 15,892개br
-                        strong인기 작물strong 옥수수br
-                        strong희귀 작물strong 용과p
-                    div
-                div
-            div
-        section
-    main
+                    <div class="info-card">
+                        <h4>🌾 작물 통계</h4>
+                        <p><strong>총 수확량:</strong> 15,892개<br>
+                        <strong>인기 작물:</strong> 옥수수<br>
+                        <strong>희귀 작물:</strong> 용과</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    !-- 푸터 --
-    footer class=footer
-        p&copy; 2025 Wild-Point Minecraft Server. All rights reserved.p
-        p서버 문의 admin@wild-point.com  디스코드 discord.ggwildpointp
-    footer
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>&copy; 2025 Wild-Point Minecraft Server. All rights reserved.</p>
+        <p>서버 문의: admin@wild-point.com | 디스코드: discord.gg/wildpoint</p>
+    </footer>
 
-    script
-         작물 데이터
+    <script>
+        // 작물 데이터
         const cropsData = [
-            { name Corn, stages 4, harvest corn_seeds, icon 🌽, type 곡물, season 여름 },
-            { name Tomato, stages 5, harvest tomato_seeds, icon 🍅, type 과일, season 여름 },
-            { name Redpacket, stages 6, harvest redpacket_seeds, icon 🧧, type 특수, season 겨울 },
-            { name Pitaya, stages 6, harvest pitaya_seeds, icon 🐉, type 열대과일, season 여름 },
-            { name Pineapple, stages 4, harvest pineapple_seeds, icon 🍍, type 열대과일, season 여름 },
-            { name Pepper, stages 5, harvest pepper_seeds, icon 🌶️, type 향신료, season 여름 },
-            { name Hop, stages 4, harvest hop_seeds, icon 🍺, type 허브, season 봄 },
-            { name Grape, stages 6, harvest grape_seeds, icon 🍇, type 과일, season 가을 },
-            { name Garlic, stages 4, harvest garlic_seeds, icon 🧄, type 향신료, season 봄 },
-            { name Eggplant, stages 4, harvest eggplant_seeds, icon 🍆, type 채소, season 여름 },
-            { name Cabbage, stages 4, harvest cabbage_seeds, icon 🥬, type 채소, season 가을 },
-            { name Apple, stages 6, harvest apple, icon 🍎, type 과일, season 가을 },
-            { name Chinese Cabbage, stages 4, harvest chinese_cabbage_seeds, icon 🥗, type 채소, season 가을 }
+            { name: "Corn", stages: 4, harvest: "corn_seeds", icon: "🌽", type: "곡물", season: "여름" },
+            { name: "Tomato", stages: 5, harvest: "tomato_seeds", icon: "🍅", type: "과일", season: "여름" },
+            { name: "Redpacket", stages: 6, harvest: "redpacket_seeds", icon: "🧧", type: "특수", season: "겨울" },
+            { name: "Pitaya", stages: 6, harvest: "pitaya_seeds", icon: "🐉", type: "열대과일", season: "여름" },
+            { name: "Pineapple", stages: 4, harvest: "pineapple_seeds", icon: "🍍", type: "열대과일", season: "여름" },
+            { name: "Pepper", stages: 5, harvest: "pepper_seeds", icon: "🌶️", type: "향신료", season: "여름" },
+            { name: "Hop", stages: 4, harvest: "hop_seeds", icon: "🍺", type: "허브", season: "봄" },
+            { name: "Grape", stages: 6, harvest: "grape_seeds", icon: "🍇", type: "과일", season: "가을" },
+            { name: "Garlic", stages: 4, harvest: "garlic_seeds", icon: "🧄", type: "향신료", season: "봄" },
+            { name: "Eggplant", stages: 4, harvest: "eggplant_seeds", icon: "🍆", type: "채소", season: "여름" },
+            { name: "Cabbage", stages: 4, harvest: "cabbage_seeds", icon: "🥬", type: "채소", season: "가을" },
+            { name: "Apple", stages: 6, harvest: "apple", icon: "🍎", type: "과일", season: "가을" },
+            { name: "Chinese Cabbage", stages: 4, harvest: "chinese_cabbage_seeds", icon: "🥗", type: "채소", season: "가을" }
         ];
 
-         섹션 전환 함수
+        // 섹션 전환 함수
         function showSection(sectionId) {
-             모든 섹션 숨기기
+            // 모든 섹션 숨기기
             const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section = {
+            sections.forEach(section => {
                 section.classList.remove('active');
             });
 
-             모든 네비게이션 아이템 비활성화
+            // 모든 네비게이션 아이템 비활성화
             const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item = {
+            navItems.forEach(item => {
                 item.classList.remove('active');
             });
 
-             선택된 섹션 보이기
+            // 선택된 섹션 보이기
             document.getElementById(sectionId).classList.add('active');
             
-             선택된 네비게이션 아이템 활성화
+            // 선택된 네비게이션 아이템 활성화
             event.target.classList.add('active');
 
-             작물 섹션이 선택되면 작물 카드 렌더링
+            // 작물 섹션이 선택되면 작물 카드 렌더링
             if (sectionId === 'crops') {
                 renderCropsGrid();
             }
         }
 
-         작물 카드 생성 함수
+        // 작물 카드 생성 함수
         function createCropCard(crop) {
-            const stagesHTML = Array(crop.stages).fill(0).map(() = 'div class=stage-dotdiv').join('');
+            const stagesHTML = Array(crop.stages).fill(0).map(() => '<div class="stage-dot"></div>').join('');
             
             return `
-                div class=crop-card
-                    div class=crop-header
-                        div class=crop-icon${crop.icon}div
-                        div class=crop-name${crop.name}div
-                        div class=crop-type${crop.type} • ${crop.season}div
-                    div
+                <div class="crop-card">
+                    <div class="crop-header">
+                        <div class="crop-icon">${crop.icon}</div>
+                        <div class="crop-name">${crop.name}</div>
+                        <div class="crop-type">${crop.type} • ${crop.season}</div>
+                    </div>
                     
-                    div class=growth-stages
+                    <div class="growth-stages">
                         ${stagesHTML}
-                    div
+                    </div>
                     
-                    div class=crop-stats
-                        div class=stat-row
-                            span성장 단계span
-                            span${crop.stages}단계span
-                        div
-                        div class=stat-row
-                            span수확 아이템span
-                            span${crop.harvest  'NA'}span
-                        div
-                        div class=stat-row
-                            span재배 계절span
-                            span${crop.season}span
-                        div
-                        div class=stat-row
-                            span작물 타입span
-                            span${crop.type}span
-                        div
-                    div
-                div
+                    <div class="crop-stats">
+                        <div class="stat-row">
+                            <span>성장 단계</span>
+                            <span>${crop.stages}단계</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>수확 아이템</span>
+                            <span>${crop.harvest || 'N/A'}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>재배 계절</span>
+                            <span>${crop.season}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>작물 타입</span>
+                            <span>${crop.type}</span>
+                        </div>
+                    </div>
+                </div>
             `;
         }
 
-         작물 그리드 렌더링 함수
+        // 작물 그리드 렌더링 함수
         function renderCropsGrid() {
             const grid = document.getElementById('cropsGrid');
             if (grid && !grid.hasChildNodes()) {
-                grid.innerHTML = cropsData.map(crop = createCropCard(crop)).join('');
+                grid.innerHTML = cropsData.map(crop => createCropCard(crop)).join('');
             }
         }
 
-         페이지 로드 시 초기화
+        // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
-             스크롤 애니메이션
+            // 스크롤 애니메이션
             const observerOptions = {
-                threshold 0.1,
-                rootMargin '0px 0px -50px 0px'
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
             };
 
-            const observer = new IntersectionObserver((entries) = {
-                entries.forEach(entry = {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.style.opacity = '1';
                         entry.target.style.transform = 'translateY(0)';
@@ -733,49 +733,49 @@ body
                 });
             }, observerOptions);
 
-             모든 카드에 애니메이션 적용
-            document.querySelectorAll('.wiki-card, .info-card').forEach(card = {
+            // 모든 카드에 애니메이션 적용
+            document.querySelectorAll('.wiki-card, .info-card').forEach(card => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(20px)';
                 card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                 observer.observe(card);
             });
 
-             네비게이션 클릭 이벤트 추가
-            document.querySelectorAll('.nav-item').forEach(item = {
+            // 네비게이션 클릭 이벤트 추가
+            document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function() {
-                    const sectionId = this.textContent.includes('홈')  'home' 
-                                    this.textContent.includes('작물')  'crops' 
-                                    this.textContent.includes('명령어')  'commands' 
-                                    this.textContent.includes('규칙')  'rules' 
-                                    this.textContent.includes('플러그인')  'plugins' 
-                                    this.textContent.includes('커뮤니티')  'community'  'home';
+                    const sectionId = this.textContent.includes('홈') ? 'home' :
+                                    this.textContent.includes('작물') ? 'crops' :
+                                    this.textContent.includes('명령어') ? 'commands' :
+                                    this.textContent.includes('규칙') ? 'rules' :
+                                    this.textContent.includes('플러그인') ? 'plugins' :
+                                    this.textContent.includes('커뮤니티') ? 'community' : 'home';
                     
                     showSection(sectionId);
                 });
             });
         });
 
-         부드러운 스크롤 효과
-        document.querySelectorAll('a[href^=#]').forEach(anchor = {
+        // 부드러운 스크롤 효과
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({
-                        behavior 'smooth',
-                        block 'start'
+                        behavior: 'smooth',
+                        block: 'start'
                     });
                 }
             });
         });
 
-         타이핑 효과 (선택사항)
+        // 타이핑 효과 (선택사항)
         function typeWriter(element, text, speed = 50) {
             let i = 0;
             element.innerHTML = '';
             function type() {
-                if (i  text.length) {
+                if (i < text.length) {
                     element.innerHTML += text.charAt(i);
                     i++;
                     setTimeout(type, speed);
@@ -784,13 +784,13 @@ body
             type();
         }
 
-         서버 상태 체크 (시뮬레이션)
+        // 서버 상태 체크 (시뮬레이션)
         function updateServerStatus() {
             const statusDot = document.querySelector('.status-dot');
             const statusText = document.querySelector('.server-status');
             
-             실제로는 서버 API를 호출하여 상태를 확인할 수 있습니다
-            const isOnline = Math.random()  0.1;  90% 확률로 온라인
+            // 실제로는 서버 API를 호출하여 상태를 확인할 수 있습니다
+            const isOnline = Math.random() > 0.1; // 90% 확률로 온라인
             
             if (isOnline) {
                 statusDot.style.background = '#2ecc71';
@@ -800,12 +800,12 @@ body
                 statusDot.style.background = '#e74c3c';
                 statusText.style.borderColor = '#e74c3c';
                 statusText.style.background = 'rgba(231, 76, 60, 0.2)';
-                statusText.querySelector('spanlast-child').textContent = '서버 점검중';
+                statusText.querySelector('span:last-child').textContent = '서버 점검중';
             }
         }
 
-         5분마다 서버 상태 업데이트
+        // 5분마다 서버 상태 업데이트
         setInterval(updateServerStatus, 300000);
-    script
-body
-html
+    </script>
+</body>
+</html>
