@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Crops 카드 도감 - Wild-Point Server</title>
+    <title>Wild-Point Custom Crops 도감</title>
     <style>
         * {
             margin: 0;
@@ -12,94 +12,144 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 20px;
         }
 
-        /* 상단 네비게이션 추가 */
-        .top-nav {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 15px 0;
-            margin-bottom: 30px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
         }
 
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .server-logo {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f39c12, #e67e22, #d35400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .server-subtitle {
+            font-size: 1.3rem;
+            color: #bdc3c7;
+            margin-bottom: 1rem;
+        }
+
+        /* 네비게이션 */
         .nav-container {
-            max-width: 1400px;
+            background: rgba(52, 73, 94, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav {
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             justify-content: center;
-            gap: 20px;
             flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0 2rem;
         }
 
         .nav-link {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
             border-radius: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
             font-weight: 600;
-            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
         }
 
         .nav-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .nav-link.active {
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            color: #333;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
         }
 
-        .header {
+        /* 메인 컨텐츠 */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .crops-header {
             text-align: center;
-            margin-bottom: 40px;
-            color: white;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
 
-        .header h1 {
+        .crops-header h1 {
             font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .header p {
+        .crops-header p {
             font-size: 1.2rem;
-            opacity: 0.9;
+            color: #bdc3c7;
         }
 
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
         }
 
         .crop-card {
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.1),
-                0 5px 15px rgba(0,0,0,0.07),
-                inset 0 1px 0 rgba(255,255,255,0.6);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
-            border: 3px solid transparent;
-            background-clip: padding-box;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .crop-card::before {
@@ -109,9 +159,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
+            background: linear-gradient(45deg, #f39c12, #3498db, #2ecc71, #e74c3c);
             border-radius: 20px;
-            padding: 3px;
+            padding: 2px;
             z-index: -1;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -123,9 +173,7 @@
 
         .crop-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 
-                0 25px 50px rgba(0,0,0,0.15),
-                0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
 
         .card-header {
@@ -137,14 +185,14 @@
         .crop-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #f39c12, #e67e22);
             border-radius: 50%;
             margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.5rem;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 16px rgba(243, 156, 18, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -175,13 +223,13 @@
         .crop-name {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: #f39c12;
             margin-bottom: 5px;
             text-transform: capitalize;
         }
 
         .crop-subtitle {
-            color: #7f8c8d;
+            color: #bdc3c7;
             font-size: 0.9rem;
             margin-bottom: 20px;
         }
@@ -196,20 +244,20 @@
             align-items: center;
             margin-bottom: 15px;
             padding: 12px 15px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
             border-radius: 10px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #3498db;
         }
 
         .stat-label {
             font-weight: 600;
-            color: #495057;
+            color: #ecf0f1;
             font-size: 0.95rem;
         }
 
         .stat-value {
             font-weight: bold;
-            color: #2c3e50;
+            color: #3498db;
         }
 
         .growth-stages {
@@ -223,8 +271,8 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            box-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
             animation: pulse 2s infinite;
         }
 
@@ -242,7 +290,7 @@
         .card-footer {
             text-align: center;
             padding-top: 15px;
-            border-top: 2px solid #e9ecef;
+            border-top: 2px solid rgba(255,255,255,0.1);
         }
 
         .rarity-badge {
@@ -255,10 +303,22 @@
             letter-spacing: 1px;
         }
 
-        .rarity-common { background: linear-gradient(135deg, #95a5a6, #7f8c8d); color: white; }
-        .rarity-rare { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
-        .rarity-epic { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; }
-        .rarity-legendary { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+        .rarity-common { 
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d); 
+            color: white; 
+        }
+        .rarity-rare { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white; 
+        }
+        .rarity-epic { 
+            background: linear-gradient(135deg, #9b59b6, #8e44ad); 
+            color: white; 
+        }
+        .rarity-legendary { 
+            background: linear-gradient(135deg, #f39c12, #e67e22); 
+            color: white; 
+        }
 
         .crop-types {
             display: flex;
@@ -273,9 +333,9 @@
             border-radius: 15px;
             font-size: 0.8rem;
             font-weight: 600;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
         }
 
         .seasonal-indicator {
@@ -297,59 +357,79 @@
         .season-autumn { background: linear-gradient(135deg, #e74c3c, #c0392b); }
         .season-winter { background: linear-gradient(135deg, #3498db, #2980b9); }
 
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .crop-card {
-            opacity: 0;
+
+        .footer p {
+            color: #bdc3c7;
+            margin: 0.5rem 0;
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .cards-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .nav-container {
+            .nav {
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .server-logo {
+                font-size: 2.5rem;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .crops-header h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 상단 네비게이션 -->
-    <nav class="top-nav">
-        <div class="nav-container">
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="server-logo">🌾 Wild-Point 🌾</div>
+        <div class="server-subtitle">커스텀 작물 도감</div>
+    </header>
+
+    <!-- 네비게이션 -->
+    <nav class="nav-container">
+        <div class="nav">
             <a href="/" class="nav-link">🏠 홈</a>
             <a href="/crops.html" class="nav-link active">🌾 작물 도감</a>
-            <a href="/#commands" class="nav-link">⚡ 명령어</a>
-            <a href="/#rules" class="nav-link">📋 규칙</a>
-            <a href="/#plugins" class="nav-link">🔧 플러그인</a>
-            <a href="/#community" class="nav-link">👥 커뮤니티</a>
+            <a href="/commands.html" class="nav-link">⚡ 명령어</a>
+            <a href="/rules.html" class="nav-link">📋 규칙</a>
+            <a href="/plugins.html" class="nav-link">🔧 플러그인</a>
+            <a href="/community.html" class="nav-link">👥 커뮤니티</a>
         </div>
     </nav>
 
-    <div class="header">
-        <h1>🌾 Custom Crops 도감 🌾</h1>
-        <p>Wild-Point 서버의 커스텀 작물 컬렉션</p>
-    </div>
+    <!-- 메인 컨텐츠 -->
+    <main class="main-container">
+        <div class="crops-header">
+            <h1>🌾 Custom Crops 도감 🌾</h1>
+            <p>Wild-Point 서버의 특별한 커스텀 작물들을 만나보세요</p>
+        </div>
 
-    <div class="cards-container" id="cardsContainer">
-        <!-- 카드들이 여기에 동적으로 생성됩니다 -->
-    </div>
+        <div class="cards-container" id="cardsContainer">
+            <!-- 카드들이 여기에 동적으로 생성됩니다 -->
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>&copy; 2025 Wild-Point Minecraft Server. All rights reserved.</p>
+        <p>서버 문의: dongkeun.lee@gmail.com | 디스코드: <a href="https://discord.gg/jUQFhhJak2" target="_blank">https://discord.gg/jUQFhhJak2</a></p>
+    </footer>
 
     <script>
         // 작물 데이터
@@ -435,15 +515,33 @@
         }
 
         // 페이지 로드 시 카드 렌더링
-        document.addEventListener('DOMContentLoaded', renderCards);
-
-        // 카드 호버 시 추가 효과
         document.addEventListener('DOMContentLoaded', function() {
+            renderCards();
+
+            // 스크롤 애니메이션
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // 카드 애니메이션 적용
             setTimeout(() => {
                 const cards = document.querySelectorAll('.crop-card');
                 cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(50px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                     card.style.animationDelay = `${index * 0.1}s`;
-                    card.style.animation = 'slideInUp 0.6s ease-out forwards';
+                    observer.observe(card);
                 });
             }, 100);
         });
